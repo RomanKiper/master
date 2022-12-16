@@ -4,8 +4,10 @@ from django.views.decorators.http import require_GET
 
 from .models import Product
 
+
 def mainsite_list(request: HttpRequest):
-    return render(request, "mainsite/product_list.html")
+    products_lists = Product.objects.all()
+    return render(request, "mainsite/product_list.html", {"products": products_lists})
 
 def product_detail(request: HttpRequest, product_slug: str):
     product = get_object_or_404(Product, slug=product_slug )

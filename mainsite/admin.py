@@ -25,7 +25,6 @@ class ProductInline(admin.StackedInline):
     model = Product
 
 
-
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
     actions = (make_published, make_unpublished)

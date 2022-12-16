@@ -2,9 +2,17 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Product</title>
 </head>
 <body>
-<b>Hello Roman</b>
+<br>
+<br>
+{% for i in products%}
+<b>{{ i.title }}</b><br>
+{{ i.author }}<br><br>
+{% empty %}
+<b>ПОСТОВ НЕТ!</b>
+{% endfor %}
+
 </body>
 </html>
