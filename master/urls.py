@@ -22,7 +22,7 @@ from mainsite.admin import manager
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("manager/", manager.urls),
-    path("mainsite/", include("mainsite.urls"))
+    path("", include("mainsite.urls"))
 ]
 
 handler404 = "mainsite.views.error404"
