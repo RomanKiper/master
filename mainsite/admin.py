@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Category, Product
+from .models import Category, Product, Contact
 
 
 @admin.action(description="Опубликовать")
@@ -57,13 +57,33 @@ class ProductAdmin(admin.ModelAdmin):
         (
             "Дополнителные",
             {
-                "fields": ("date_created", "author", "slug")
+                "fields": ("date_created", "author", "slug", "image")
             }
 
         )
     )
 
+
+@admin.register(Contact)
+class ContactAdmin(admin.ModelAdmin):
+    list_display = ('name', 'email', 'phone', 'is_published')
+    search_fields = ("phone", "name",)
+    search_help_text = "Поиск по имени"
+    ordering = ("-date_created",)
+
+
+
+class ContactManager(ContactAdmin):
+    readonly_fields = ('email', 'message', 'name', 'phone', 'date_created')
+
+
+
+
+
+
+
 # admin.site.register(Category, CategoryAdmin)
 # admin.site.register(Product, ProductAdmin)
 manager.register(Category, CategoryAdmin)
 manager.register(Product, ProductAdmin)
+manager.register(Contact, ContactManager)
