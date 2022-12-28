@@ -1,19 +1,19 @@
 <form method="post">
     {% csrf_token %}
     <div class="form-floating">
-        {{ contact_form.name }}
+        {{ form.name }}
         <label for="name">Имя</label>
     </div>
     <div class="form-floating">
-        {{ contact_form.phone }}
+        {{ form.phone }}
         <label for="phone">Номер телефона</label>
     </div>
     <div class="form-floating">
-        {{ contact_form.email }}
+        {{ form.email }}
         <label for="email">Адрес электронной почты</label>
     </div>
     <div class="form-floating">
-        {{ contact_form.message }}
+        {{ form.message }}
         <label for="message">Сообщение</label>
     </div>
     <br />

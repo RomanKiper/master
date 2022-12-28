@@ -67,6 +67,7 @@ class ProductAdmin(admin.ModelAdmin):
 @admin.register(Contact)
 class ContactAdmin(admin.ModelAdmin):
     list_display = ('name', 'email', 'phone', 'is_published')
+    list_editable = ('is_published',)
     search_fields = ("phone", "name",)
     search_help_text = "Поиск по имени"
     ordering = ("-date_created",)

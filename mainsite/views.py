@@ -1,10 +1,11 @@
 from django.http import HttpRequest
 from django.shortcuts import render, get_object_or_404
+from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import ListView, DetailView, CreateView, TemplateView
 from django.views.decorators.http import require_GET
 from .forms import ContactForm
-from .models import Product
+from .models import Product, Contact
 
 
 class BaseMixin:
@@ -27,7 +28,14 @@ class MainsiteListView(BaseMixin, ListView):
         context['heading'] = "+++BOGDANSITE+++"
         context['subheading'] = 'ручная работа'
         context.update(self.context)
+        context['form'] = ContactForm()
         return context
+
+    def post(self, request: HttpRequest):
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            form.save()
+        return self.get(request=request)
 
 
 class ProductDetailView(BaseMixin, DetailView):
@@ -42,24 +50,44 @@ class ProductDetailView(BaseMixin, DetailView):
         return context
 
 
-# @require_GET
-# def mainsite_list(request: HttpRequest):
-#     products_lists = Product.objects.all()
-#     return render(request, "mainsite/index.html", {"products": products_lists})
+class AboutTemplateView(BaseMixin, TemplateView):
+    template_name = "mainsite/about.html"
 
-# def product_detail(request: HttpRequest, product_slug: str):
-#     product = get_object_or_404(Product, slug=product_slug)
-#     # product = Product.objects.get(slug=product_slug)
-#     return render(request, "mainsite/post.html", {"product": product})
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        context.update(self.context)
+        context['heading'] = 'about us'
+        context['coordinate'] = 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d10221.793301433216!2d27.54570734394003!3d53.906860922347065!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x46dbcf94b327141f%3A0xd74e660de1f79fe9!2z0J3QtdC80LjQs9Cw!5e1!3m2!1sru!2sby!4v1671128718358!5m2!1sru!2sby'
+        context['about'] = '''
+        ABOUT ABOUT ABOUT ABOUT        
+        ABOUT ABOUT ABOUT ABOUT        
+        ABOUT ABOUT ABOUT ABOUT        
+        ABOUT ABOUT ABOUT ABOUT        
+        ABOUT ABOUT ABOUT ABOUT        
+        ABOUT ABOUT ABOUT ABOUT                
+        '''
+        return context
 
 
-def contact(request: HttpRequest):
-    if request.method == "POST":
-        form = ContactForm(request.POST)
-        if form.is_valid():
-            form.save()
-    form = ContactForm()
-    return render(request, "mainsite/contact.html", {"contact_form": form})
+class ContactCreateView(BaseMixin, CreateView):
+    template_name = "mainsite/contact.html"
+    model = Contact
+    form_class = ContactForm
+    success_url = reverse_lazy('mainsite_products')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        context.update(self.context)
+        context['heading'] = 'Свяжитесь с нами, иначе мы найдем вас )'
+        return context
+
+# def contact(request: HttpRequest):
+#     if request.method == "POST":
+#         form = ContactForm(request.POST)
+#         if form.is_valid():
+#             form.save()
+#     form = ContactForm()
+#     return render(request, "mainsite/contact.html", {"contact_form": form})
 
 
 def error404(request, exception):
