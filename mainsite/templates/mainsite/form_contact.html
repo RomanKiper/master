@@ -1,5 +1,8 @@
 <form method="post">
     {% csrf_token %}
+    <label>
+        <input name='contact_form_2' value='contact_form' hidden>
+    </label>
     <div class="form-floating">
         {{ form.name }}
         <label for="name">Имя</label>

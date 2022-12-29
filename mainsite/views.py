@@ -4,7 +4,7 @@ from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import ListView, DetailView, CreateView, TemplateView
 from django.views.decorators.http import require_GET
-from .forms import ContactForm
+from .forms import ContactForm, Myform
 from .models import Product, Contact
 
 
@@ -29,12 +29,17 @@ class MainsiteListView(BaseMixin, ListView):
         context['subheading'] = 'ручная работа'
         context.update(self.context)
         context['form'] = ContactForm()
+        context['my_form'] = Myform()
         return context
 
     def post(self, request: HttpRequest):
-        form = ContactForm(request.POST)
-        if form.is_valid():
-            form.save()
+        if request.POST.get('contact_form_2') == "contact_form":
+            form = ContactForm(request.POST)
+            if form.is_valid():
+                form.save()
+        elif request.POST.get('contact_form_2') == "email_form":                #or "phone_form"::
+            print(request.POST.get('email'))
+
         return self.get(request=request)
 
 
@@ -80,14 +85,6 @@ class ContactCreateView(BaseMixin, CreateView):
         context.update(self.context)
         context['heading'] = 'Свяжитесь с нами, иначе мы найдем вас )'
         return context
-
-# def contact(request: HttpRequest):
-#     if request.method == "POST":
-#         form = ContactForm(request.POST)
-#         if form.is_valid():
-#             form.save()
-#     form = ContactForm()
-#     return render(request, "mainsite/contact.html", {"contact_form": form})
 
 
 def error404(request, exception):
