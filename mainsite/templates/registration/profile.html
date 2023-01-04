@@ -1,0 +1,14 @@
+{% extends "mainsite/base.html" %}
+
+{% block title %}
+ПРОФИЛЬ
+{% endblock %}
+
+{% block main %}
+<p>Личная страница пользователя. Личный кабинет.</p>
+<br>
+{{user.username}}<br>
+<br>
+<br>
+{{user.email}}<br>
+{% endblock %}

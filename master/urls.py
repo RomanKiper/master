@@ -24,6 +24,7 @@ from mainsite.admin import manager
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("manager/", manager.urls),
+    path("", include("registration.urls")),
     path("", include("mainsite.urls"))
 ]
 if settings.DEBUG:

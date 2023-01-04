@@ -29,6 +29,8 @@ ALLOWED_HOSTS = []
 
 
 # Application definition
+# LOGIN_REDIRECT_URL = 'mainsite_products'
+LOGOUT_REDIRECT_URL = 'mainsite_products'
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -38,6 +40,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "mainsite.apps.MainsiteConfig",
+    "registration.apps.RegistrationConfig"
 ]
 
 MIDDLEWARE = [

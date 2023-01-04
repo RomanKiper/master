@@ -4,6 +4,7 @@ from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import ListView, DetailView, CreateView, TemplateView
 from django.views.decorators.http import require_GET
+from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import ContactForm, Myform
 from .models import Product, Contact
 
@@ -55,8 +56,9 @@ class ProductDetailView(BaseMixin, DetailView):
         return context
 
 
-class AboutTemplateView(BaseMixin, TemplateView):
+class AboutTemplateView(LoginRequiredMixin, BaseMixin, TemplateView):
     template_name = "mainsite/about.html"
+    login_url = "signin"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
