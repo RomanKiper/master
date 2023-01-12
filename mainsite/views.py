@@ -76,6 +76,7 @@ class AboutTemplateView(LoginRequiredMixin, BaseMixin, TemplateView):
         return context
 
 
+
 class ContactCreateView(BaseMixin, CreateView):
     template_name = "mainsite/contact.html"
     model = Contact
