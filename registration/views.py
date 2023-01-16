@@ -8,13 +8,13 @@ from .forms import RegisterForm, Loginform
 
 class RegisterCreateView(CreateView):
     form_class = RegisterForm
-    template_name = 'registration/signup.html'
+    template_name = 'registration/signup_new.html'
     success_url = reverse_lazy('signin')
 
 
 class SignInView(LoginView):
     form_class = Loginform
-    template_name = 'registration/signin.html'
+    template_name = 'registration/signin_new.html'
     success_url = reverse_lazy('mainsite_products')
 
 

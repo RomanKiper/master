@@ -1,10 +1,24 @@
-{% extends "mainsite/base.html" %}
+{% extends "registration/base_registration.html" %}
 
 {% block title %}
-ПРОФИЛЬ
+ЛИЧНЫЙ КАБИНЕТ
 {% endblock %}
 
-{% block main %}
+{% block main_new %}
+
+<!-- Breadcrumb Start -->
+<div class="container-fluid">
+    <div class="row px-xl-5">
+        <div class="col-12">
+            <nav class="breadcrumb bg-light mb-30">
+                <a class="breadcrumb-item text-dark" href="{% url 'mainsite_products' %}">ВЕРНУТЬСЯ НА ГЛАВНУЮ СТРАНИЦУ</a>
+                <span class="breadcrumb-item active">Личный кабинет </span>
+            </nav>
+        </div>
+    </div>
+</div>
+<!-- Breadcrumb End -->
+
 <p>Личная страница пользователя. Личный кабинет.</p>
 <br>
 {{user.username}}<br>

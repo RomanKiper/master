@@ -1,0 +1,68 @@
+{% extends "registration/base_registration.html" %}
+{% load static %}
+
+{% block title %}
+АВТОРИЗАЦИЯ
+{% endblock %}
+
+{% block main_new %}
+<!-- Breadcrumb Start -->
+<div class="container-fluid">
+    <div class="row px-xl-5">
+        <div class="col-12">
+            <nav class="breadcrumb bg-light mb-30">
+                <a class="breadcrumb-item text-dark" href="{% url 'mainsite_products' %}">Главная</a>
+                <span class="breadcrumb-item active">Авторизация</span>
+            </nav>
+        </div>
+    </div>
+</div>
+<!-- Breadcrumb End -->
+
+
+<!-- Contact Start -->
+<div class="container-fluid">
+    <h4 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span class="bg-secondary pr-3">Введите логин и пароль для того чтобы зайти в личный кабинет</span></h4>
+    <div class="row px-xl-5">
+        <div class="col-lg-7 mb-5">
+            <div class="contact-form bg-light p-30">
+                <div id="success"></div>
+                <form class="login100-form validate-form" method="post">
+					{% csrf_token %}
+					<div class="wrap-input100 validate-input m-b-26" data-validate="Username is required">
+						<span class="label-input100">Username</span>
+						{{ form.username }}
+						<span class="focus-input100"></span>
+					</div>
+
+					<div class="wrap-input100 validate-input m-b-18" data-validate="Password is required">
+						<span class="label-input100">Password</span>
+						{{ form.password }}
+						<span class="focus-input100"></span>
+					</div>
+
+					<div class="flex-sb-m w-full p-b-30">
+
+						<div>
+							<a href="{% url 'signup' %}" class="txt1">
+								Если вы еще не зарегистрированы, то пройдите на страницу регистрации
+							</a>
+						</div>
+					</div>
+
+					<div class="container-login100-form-btn">
+						<button class="login100-form-btn">
+							ВХОД
+						</button>
+					</div>
+				</form>
+            </div>
+        </div>
+        <div class="col-lg-5 mb-5">
+			information place
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+

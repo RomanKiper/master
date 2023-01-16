@@ -9,7 +9,7 @@ class ContactForm(ModelForm):
             attrs={
                 'class': 'form-control',
                 'id': 'name',
-                'placeholder': "Name",
+                'placeholder': "Имя",
 
             }
         ),
@@ -20,7 +20,7 @@ class ContactForm(ModelForm):
             attrs={
                 'class': 'form-control',
                 'id': 'phone',
-                'placeholder': 'Phone'
+                'placeholder': 'Номер телефона'
             }
         ),
         max_length=64
@@ -30,7 +30,7 @@ class ContactForm(ModelForm):
             attrs={
                 'class': 'form-control',
                 'id': 'email',
-                'placeholder': 'Email'
+                'placeholder': 'Эл.почта'
             }
         ),
         max_length=254
@@ -40,7 +40,7 @@ class ContactForm(ModelForm):
             attrs={
                 'class': 'form-control',
                 'id': 'message',
-                'placeholder': 'Message',
+                'placeholder': 'Напишите сообщение',
                 'style': 'height: 7rem'
             }
         ),
