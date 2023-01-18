@@ -10,7 +10,8 @@ class RegisterForm(UserCreationForm):
             attrs={
                 'class': 'input100',
                 'name': 'username',
-                'placeholder': 'Введите логин'
+                'placeholder': 'Введите логин',
+                'style': 'width: 25rem'
             }
         )
     )
@@ -19,7 +20,8 @@ class RegisterForm(UserCreationForm):
             attrs={
                 'class': 'input100',
                 'name': 'email',
-                'placeholder': 'Введите адрес электронной почты'
+                'placeholder': 'Введите адрес электронной почты',
+                'style': 'width: 25rem'
             }
         )
     )
@@ -29,7 +31,8 @@ class RegisterForm(UserCreationForm):
             attrs={
                 'class': 'input100',
                 'name': 'password1',
-                'placeholder': 'Введите пароль'
+                'placeholder': 'Введите пароль',
+                'style': 'width: 25rem'
             }
         )
 
@@ -40,7 +43,8 @@ class RegisterForm(UserCreationForm):
             attrs={
                 'class': 'input100',
                 'name': 'password2',
-                'placeholder': 'Повторите пароль'
+                'placeholder': 'Повторите пароль',
+                'style': 'width: 25rem'
             }
         )
 
@@ -60,7 +64,8 @@ class Loginform(AuthenticationForm):
             attrs={
                 'class': 'input100',
                 'name': 'username',
-                'placeholder': 'Введите логин'
+                'placeholder': 'Введите логин',
+                'style': 'width: 25rem'
             }
         )
     )
@@ -70,7 +75,8 @@ class Loginform(AuthenticationForm):
             attrs={
                 'class': 'input100',
                 'name': 'password',
-                'placeholder': 'Введите пароль'
+                'placeholder': 'Введите пароль',
+                'style': 'width: 25rem'
             }
         )
 

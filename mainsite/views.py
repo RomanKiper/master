@@ -16,6 +16,21 @@ class BaseMixin:
     }
 
 
+class CatalogListView(BaseMixin, ListView):
+    template_name = "mainsite_new/catalog.html"
+    context_object_name = "catalog"
+    model = Product
+
+    def get_queryset(self):
+        return Product.objects.filter(is_published=True)
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data()
+        context.update(self.context)
+        return context
+
+
+
 class MainsiteListView(BaseMixin, ListView):
     template_name = "mainsite_new/index.html"
     context_object_name = "products"
