@@ -57,7 +57,7 @@ class ProductAdmin(admin.ModelAdmin):
         (
             "Дополнителные",
             {
-                "fields": ("date_created", "author", "slug", "image")
+                "fields": ("date_created", "author", "slug", "image", "novelty")
             }
 
         )

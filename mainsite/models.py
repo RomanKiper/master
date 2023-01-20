@@ -43,6 +43,12 @@ class Product(models.Model):
         default=True,
         verbose_name="публикация"
     )
+
+    novelty = models.BooleanField(
+        default=False,
+        verbose_name="новый товар"
+    )
+
     date_created = models.DateTimeField(
         default=now,
         verbose_name="дата создания"

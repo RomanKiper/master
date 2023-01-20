@@ -7,6 +7,7 @@ from django.views.decorators.http import require_GET
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import ContactForm, Myform
 from .models import Product, Contact
+from django.core.paginator import Paginator
 
 
 class BaseMixin:
@@ -17,6 +18,7 @@ class BaseMixin:
 
 
 class CatalogListView(BaseMixin, ListView):
+    paginate_by = 6
     template_name = "mainsite_new/catalog.html"
     context_object_name = "catalog"
     model = Product
@@ -39,22 +41,11 @@ class MainsiteListView(BaseMixin, ListView):
     def get_queryset(self):
         return Product.objects.filter(is_published=True)
 
+
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data()
         context.update(self.context)
-        context['form'] = ContactForm()
-        context['my_form'] = Myform()
         return context
-
-    def post(self, request: HttpRequest):
-        if request.POST.get('contact_form_2') == "contact_form":
-            form = ContactForm(request.POST)
-            if form.is_valid():
-                form.save()
-        elif request.POST.get('contact_form_2') == "email_form":  # or "phone_form"::
-            print(request.POST.get('email'))
-
-        return self.get(request=request)
 
 
 class ProductDetailView(BaseMixin, DetailView):
