@@ -110,16 +110,16 @@ class ContactCreateView(BaseMixin, CreateView):
         return context
 
 
-# class EmailCreateView(BaseMixin, CreateView):
-#     template_name = "mainsite_new/email_send_form.html"
-#     model = EmailBase
-#     form_class = EmailBaseForm
-#     success_url = reverse_lazy('mainsite_catalog')
-#
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data()
-#         context.update(self.context)
-#         return context
+class EmailCreateView(BaseMixin, CreateView):
+    template_name = "mainsite_new/base.html"
+    model = EmailBase
+    form_class = EmailBaseForm
+    success_url = reverse_lazy('mainsite_contact')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        context.update(self.context)
+        return context
 
 
 
