@@ -72,10 +72,6 @@ class ContactAdmin(admin.ModelAdmin):
 
 
 
-# class ContactManager(ContactAdmin):
-#     readonly_fields = ('email', 'message', 'name', 'phone', 'date_created')
-
-
 @admin.register(EmailBase)
 class EmailBaseAdmin(admin.ModelAdmin):
     list_display = ('email', 'is_published',)
