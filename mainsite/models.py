@@ -16,6 +16,12 @@ class Category(models.Model):
         default=True,
         verbose_name="публикация",
     )
+    image = models.ImageField(
+        upload_to='post',
+        verbose_name='картинка',
+        null=True,
+        blank=True
+    )
     slug = models.SlugField(verbose_name="URL", unique=True)
 
     def __str__(self):
@@ -115,7 +121,23 @@ class Contact(models.Model):
     class Meta:
         db_table = 'mainsite_contacts'
         verbose_name = "контакт"
-        verbose_name_plural = "контакты"
+        verbose_name_plural = "База контактов"
         ordering = ['date_created',]
+
+
+class EmailBase(models.Model):
+    email = models.CharField(max_length=64, verbose_name='эллектронная почта')
+    date_created = models.DateTimeField(default=now, verbose_name="дата контакта")
+    is_published = models.BooleanField(default=False, verbose_name="прочитано",)
+
+    def __str__(self):
+        return self.email
+
+    class Meta:
+        db_table = 'mainsite_email_base'
+        verbose_name = "адрес почты"
+        verbose_name_plural = "база эллектронных адресов"
+        ordering = ['date_created',]
+
 
 

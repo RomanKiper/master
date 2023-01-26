@@ -5,8 +5,8 @@ from django.views import View
 from django.views.generic import ListView, DetailView, CreateView, TemplateView
 from django.views.decorators.http import require_GET
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .forms import ContactForm, Myform
-from .models import Product, Contact
+from .forms import ContactForm, EmailBaseForm
+from .models import Product, Contact, EmailBase, Category
 from django.core.paginator import Paginator
 
 
@@ -18,7 +18,7 @@ class BaseMixin:
 
 
 class CatalogListView(BaseMixin, ListView):
-    paginate_by = 6
+    paginate_by = 9
     template_name = "mainsite_new/catalog.html"
     context_object_name = "catalog"
     model = Product
@@ -32,15 +32,9 @@ class CatalogListView(BaseMixin, ListView):
         return context
 
 
-
-class MainsiteListView(BaseMixin, ListView):
+class MainPageCategoryView(BaseMixin, ListView):
     template_name = "mainsite_new/index.html"
-    context_object_name = "products"
-    model = Product
-
-    def get_queryset(self):
-        return Product.objects.filter(is_published=True)
-
+    model = Category
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data()
@@ -48,8 +42,33 @@ class MainsiteListView(BaseMixin, ListView):
         return context
 
 
+class MainPageProductNewView(BaseMixin, ListView):
+    template_name = "mainsite_new/index.html"
+    model = Product
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data()
+        context.update(self.context)
+        return context
+
+
+def main_page(request):
+    product_new = Product.objects.filter(is_published=True, novelty=True )[:4]
+    product_mostpopular = Product.objects.filter(is_published=True,)[:8]
+    category = Category.objects.filter(is_published=True)
+
+    response_data = {
+        'product_new': product_new,
+        'category': category,
+        'product_mostpopular': product_mostpopular,
+    }
+
+    return render(request, 'mainsite_new/index.html', response_data)
+
+
+
 class ProductDetailView(BaseMixin, DetailView):
-    template_name = 'mainsite/post.html'
+    template_name = 'mainsite_new/product_main.html'
     context_object_name = 'product'
     slug_url_kwarg = 'product_slug'
     model = Product
@@ -89,6 +108,35 @@ class ContactCreateView(BaseMixin, CreateView):
         context = super().get_context_data()
         context.update(self.context)
         return context
+
+
+# class EmailCreateView(BaseMixin, CreateView):
+#     template_name = "mainsite_new/email_send_form.html"
+#     model = EmailBase
+#     form_class = EmailBaseForm
+#     success_url = reverse_lazy('mainsite_catalog')
+#
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data()
+#         context.update(self.context)
+#         return context
+
+
+
+class Searchpanel(ListView):
+    template_name = "mainsite_new/search_result.html"
+    context_object_name = "news"
+    model = Product
+
+
+    def get_queryset(self):
+        return Product.objects.filter(title__icontains=self.request.GET.get('q'))
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['q'] = self.request.GET.get('q')
+        return context
+
 
 
 def error404(request, exception):

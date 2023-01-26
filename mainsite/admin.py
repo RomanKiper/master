@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Category, Product, Contact
+from .models import Category, Product, Contact, EmailBase
 
 
 @admin.action(description="Опубликовать")
@@ -51,7 +51,6 @@ class ProductAdmin(admin.ModelAdmin):
             {
                 "fields": ("title", "descr", "category", "price", "is_published" ),
                 "description": "Основные значения"
-
             }
         ),
         (
@@ -59,7 +58,6 @@ class ProductAdmin(admin.ModelAdmin):
             {
                 "fields": ("date_created", "author", "slug", "image", "novelty")
             }
-
         )
     )
 
@@ -74,17 +72,20 @@ class ContactAdmin(admin.ModelAdmin):
 
 
 
-class ContactManager(ContactAdmin):
-    readonly_fields = ('email', 'message', 'name', 'phone', 'date_created')
+# class ContactManager(ContactAdmin):
+#     readonly_fields = ('email', 'message', 'name', 'phone', 'date_created')
+
+
+@admin.register(EmailBase)
+class EmailBaseAdmin(admin.ModelAdmin):
+    list_display = ('email', 'is_published',)
+    list_editable = ('is_published',)
+    search_fields = ('email',)
+    search_help_text = 'Поиск по эллектронной почте'
+    ordering = ('-date_created',)
 
 
 
-
-
-
-
-# admin.site.register(Category, CategoryAdmin)
-# admin.site.register(Product, ProductAdmin)
-manager.register(Category, CategoryAdmin)
-manager.register(Product, ProductAdmin)
-manager.register(Contact, ContactManager)
+# manager.register(Category, CategoryAdmin)
+# manager.register(Product, ProductAdmin)
+# manager.register(Contact, ContactManager)

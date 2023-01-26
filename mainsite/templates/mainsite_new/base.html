@@ -34,8 +34,6 @@
         <div class="row bg-secondary py-1 px-xl-5">
             <div class="col-lg-6 d-none d-lg-block">
                 <div class="d-inline-flex align-items-center h-100">
-                    <a class="text-body mr-3" href="{% url 'mainsite_about' %}">О нас</a>
-                    <a class="text-body mr-3" href="{% url 'mainsite_contact' %}">Контакты</a>
                 </div>
             </div>
             <div class="col-lg-6 text-center text-lg-right">
@@ -67,12 +65,12 @@
                 </a>
             </div>
             <div class="col-lg-4 col-6 text-left">
-                <form action="">
+                <form action="{% url 'search' %}" method="get" name="q">
                     <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Search for products">
+                        <input type="text" class="form-control" placeholder="Поиск товара">
                         <div class="input-group-append">
                             <span class="input-group-text bg-transparent text-primary">
-                                <i class="fa fa-search"></i>
+                                <i class="fa fa-search">Найти</i>
                             </span>
                         </div>
                     </div>
@@ -104,9 +102,10 @@
                         <div class="navbar-nav mr-auto py-0">
                             <a href="{% url 'mainsite_products' %}" class="nav-item nav-link active">Главная</a>
                             <a href="{% url 'mainsite_catalog' %}" class="nav-item nav-link">Каталог</a>
-                            <a href="#" class="nav-item nav-link">Страница товара/тест</a>
                             <a href="{% url 'mainsite_contact' %}" class="nav-item nav-link">Контакты</a>
+                            <a href="{% url 'mainsite_about' %}" class="nav-item nav-link">О нас</a>
                         </div>
+
                         <div class="navbar-nav ml-auto py-0 d-none d-lg-block">
                             <a href="" class="btn px-0">
                                 <i class="fas fa-heart text-primary"></i>
@@ -143,7 +142,9 @@
                     <div class="col-md-4 mb-5">
                         <h5 class="text-secondary text-uppercase mb-4">Подпишись на почтовую рассылку</h5>
                         <p>Отправьте адрес эл. почты.</p>
-                        <form action="">
+                        <form action="" form method="post">
+                            {% csrf_token %}
+                            {{ form.email }}
                             <div class="input-group">
                                 <input type="text" class="form-control" placeholder="Ваш адрес">
                                 <div class="input-group-append">
