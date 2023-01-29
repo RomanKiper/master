@@ -52,7 +52,7 @@ class ContactForm(ModelForm):
         fields = ('name', 'email', 'message', 'phone')
 
 
-class EmailBaseForm(Form):
+class EmailBaseForm(ModelForm):
     email = EmailField(
         widget=EmailInput(
             attrs={
@@ -63,7 +63,6 @@ class EmailBaseForm(Form):
         ),
         max_length=254
     )
-
 
     class Meta:
         model = EmailBase

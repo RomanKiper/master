@@ -27,8 +27,11 @@
         <div class="col-lg-7 mb-5">
             <div class="contact-form bg-light p-30">
                 <div id="success"></div>
-                <form name="sentMessage" form method="post" novalidate="novalidate">
+                <form name="sentContact" form method="post" novalidate="novalidate">
                     {% csrf_token %}
+                    <label>
+                        <input name="form_type" value="sentContact" hidden>
+                    </label>
                     <div class="control-group">
                         {{ form.name }}
                         <p class="help-block text-danger"></p>

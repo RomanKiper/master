@@ -14,7 +14,15 @@ class BaseMixin:
     context = {
         'instagram': 'https://instagram.com/stallain.by?igshid=NTdlMDg3MTY=',
         'facebook': 'https://www.facebook.com/',
-    }
+        'form_email': EmailBaseForm(),
+        }
+
+    def post(self, request):
+        form = EmailBaseForm(request.POST)
+        if form.is_valid():
+            form.save()
+        return self.get(request)
+
 
 
 class CatalogListView(BaseMixin, ListView):
@@ -39,32 +47,16 @@ class MainPageCategoryView(BaseMixin, ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data()
         context.update(self.context)
+        product_new = Product.objects.filter(is_published=True, novelty=True)[:4]
+        product_mostpopular = Product.objects.filter(is_published=True, )[:8]
+        category = Category.objects.filter(is_published=True)
+
+        context.update({
+            'product_new': product_new,
+            'category': category,
+            'product_mostpopular': product_mostpopular,
+        })
         return context
-
-
-class MainPageProductNewView(BaseMixin, ListView):
-    template_name = "mainsite_new/index.html"
-    model = Product
-
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super().get_context_data()
-        context.update(self.context)
-        return context
-
-
-def main_page(request):
-    product_new = Product.objects.filter(is_published=True, novelty=True )[:4]
-    product_mostpopular = Product.objects.filter(is_published=True,)[:8]
-    category = Category.objects.filter(is_published=True)
-
-    response_data = {
-        'product_new': product_new,
-        'category': category,
-        'product_mostpopular': product_mostpopular,
-    }
-
-    return render(request, 'mainsite_new/index.html', response_data)
-
 
 
 class ProductDetailView(BaseMixin, DetailView):
@@ -107,7 +99,20 @@ class ContactCreateView(BaseMixin, CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
         context.update(self.context)
+        context['form'] = ContactForm()
+        context['form_email'] = EmailBaseForm()
         return context
+
+
+    def post(self, request: HttpRequest):
+        if request.POST.get('form_type') == 'sentContact':
+                form = ContactForm(request.POST)
+                if form.is_valid():
+                    form.save()
+        elif request.POST.get('form_tipe') == 'sentMessage':
+            print(request.POST.get('form_email'))
+        return self.get(request=request)
+
 
 
 class EmailCreateView(BaseMixin, CreateView):
@@ -120,7 +125,6 @@ class EmailCreateView(BaseMixin, CreateView):
         context = super().get_context_data()
         context.update(self.context)
         return context
-
 
 
 class Searchpanel(ListView):

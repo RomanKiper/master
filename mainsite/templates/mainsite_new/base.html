@@ -142,12 +142,14 @@
                     <div class="col-md-4 mb-5">
                         <h5 class="text-secondary text-uppercase mb-4">Подпишись на почтовую рассылку</h5>
                         <p>Отправьте адрес эл. почты.</p>
-                        <form action="" form method="post">
+                        <form action="" method="post" form name="Message">
                             {% csrf_token %}
-                            {{ form.email }}
+                            <label>
+                                <input name="form_type" value="sentMessage" hidden>
+                            </label>
                             <div class="input-group">
-                                <input type="text" class="form-control" placeholder="Ваш адрес">
                                 <div class="input-group-append">
+                                    {{ form_email.email }}
                                     <button class="btn btn-primary">Отправить</button>
                                 </div>
                             </div>
