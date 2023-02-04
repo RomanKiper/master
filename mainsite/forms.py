@@ -1,5 +1,6 @@
 from django.forms import ModelForm, EmailField, CharField, TextInput, EmailInput, Textarea, Form
 
+
 from .models import Contact, EmailBase
 
 
@@ -67,3 +68,6 @@ class EmailBaseForm(ModelForm):
     class Meta:
         model = EmailBase
         fields = ('email',)
+
+
+

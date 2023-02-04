@@ -4,6 +4,113 @@ from django.urls import reverse
 from django.utils.timezone import now
 
 
+class TypeOfPublications(models.Model):
+    name = models.CharField(
+        max_length=64,
+        verbose_name="вид публикации",
+        help_text="выберите вид публикации"
+    )
+    is_published = models.BooleanField(
+        default=False,
+        verbose_name="опубликовать"
+    )
+    slug = models.SlugField(verbose_name="URL", unique=True)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = "вид публикации"
+        verbose_name_plural = "вид публикций"
+        db_table = "type_of_publications"
+
+
+class Publication(models.Model):
+    title = models.CharField(
+        max_length=128,
+        verbose_name="название"
+    )
+    descr = models.TextField(verbose_name="описание")
+    is_published = models.BooleanField(
+        default=False,
+        verbose_name="публикация"
+    )
+    date_created = models.DateTimeField(
+        default=now,
+        verbose_name="дата создания"
+    )
+    slug = models.SlugField(
+        verbose_name="URL",
+        unique=True
+    )
+    type_of_publication = models.ForeignKey(
+        TypeOfPublications,
+        on_delete=models.DO_NOTHING,
+        verbose_name="вид публикации"
+    )
+    image = models.ImageField(
+        upload_to='post',
+        verbose_name='картинка',
+        null=True,
+        blank=True
+    )
+
+    def __str__(self):
+        return self.title
+
+    def get_absolute_url(self):
+        return reverse("mainsite_publication", kwargs={"publication_slug": self.slug})
+
+    class Meta:
+        db_table = "mainsite_publication"
+        verbose_name = "публикация"
+        verbose_name_plural = "публикации"
+        ordering = ["date_created"]
+
+
+
+class FilterPrice(models.Model):
+    name = models.CharField(
+        max_length=64,
+        null=True,
+        verbose_name="диапазон цены",
+        help_text="Выберите в какой диапазон входит цена товара"
+    )
+    is_published = models.BooleanField(
+        default=True,
+        verbose_name="активировать"
+    )
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = "диапазон цены"
+        verbose_name_plural = "диапазон цен"
+        db_table = "filter_price"
+
+
+class FilterAvailability(models.Model):
+    name = models.CharField(
+        max_length=64,
+        null=True,
+        verbose_name="наличие на складе",
+        help_text="Укажите есть товар в наличии или он под заказ"
+    )
+    is_published = models.BooleanField(
+        default=True,
+        verbose_name="наличие на складе"
+    )
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = "наличие товара"
+        verbose_name_plural = "наличие товаров"
+        db_table = "filter_availability"
+
+
 class Category(models.Model):
     name = models.CharField(
         max_length=64,
@@ -33,6 +140,7 @@ class Category(models.Model):
         db_table = "blog_categories"
 
 
+
 class Product(models.Model):
     title = models.CharField(
         max_length=128,
@@ -50,9 +158,16 @@ class Product(models.Model):
         verbose_name="публикация"
     )
 
+    # товар-новинка
     novelty = models.BooleanField(
         default=False,
         verbose_name="новый товар"
+    )
+
+    # популярность товара
+    popularity = models.BooleanField(
+        default=False,
+        verbose_name="популярный товар",
     )
 
     date_created = models.DateTimeField(
@@ -73,6 +188,18 @@ class Product(models.Model):
         Category,
         on_delete=models.DO_NOTHING,
         verbose_name="категория"
+    )
+    filter_availability = models.ForeignKey(
+        FilterAvailability,
+        on_delete=models.DO_NOTHING,
+        verbose_name="наличие товара",
+        default=True
+    )
+    filter_price = models.ForeignKey(
+        FilterPrice,
+        on_delete=models.DO_NOTHING,
+        verbose_name="диапазон цены",
+        default = True
     )
     author = models.ForeignKey(
         User,

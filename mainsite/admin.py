@@ -1,6 +1,7 @@
 from django.contrib import admin
 
-from .models import Category, Product, Contact, EmailBase
+from .models import Category, Product, Contact, EmailBase, FilterAvailability, FilterPrice, Publication, \
+    TypeOfPublications
 
 
 @admin.action(description="Опубликовать")
@@ -13,14 +14,6 @@ def make_unpublished(self, request, queryset):
     queryset.update(is_published=False)
 
 
-class ManagerPanel(admin.AdminSite):
-    site_header = "Manager panel"
-    site_title = "Manager"
-    index_title = "Manager index"
-
-manager = ManagerPanel(name="manager")
-
-
 class ProductInline(admin.StackedInline):
     model = Product
 
@@ -28,10 +21,30 @@ class ProductInline(admin.StackedInline):
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
     actions = (make_published, make_unpublished)
-    inlines = (ProductInline,)
     list_display = ("name", "is_published",)
     list_filter = ("is_published",)
     prepopulated_fields = {"slug": ("name",)}
+
+
+@admin.register(TypeOfPublications)
+class TypeOfPublications(admin.ModelAdmin):
+    actions = (make_published, make_unpublished)
+    list_display = ("name", "is_published",)
+    list_filter = ("is_published",)
+
+
+@admin.register(FilterAvailability)
+class FilterAvalabilityAdmin(admin.ModelAdmin):
+    actions = (make_published, make_unpublished)
+    list_display = ("name", "is_published",)
+    list_filter = ("is_published",)
+
+
+@admin.register(FilterPrice)
+class FilterPriceAdmin(admin.ModelAdmin):
+    actions = (make_published, make_unpublished)
+    list_display = ("name", "is_published",)
+    list_filter = ("is_published",)
 
 
 @admin.register(Product)
@@ -39,7 +52,7 @@ class ProductAdmin(admin.ModelAdmin):
     actions = (make_published, make_unpublished)
     search_fields = ("title", "price",)
     search_help_text = "Поиск по заголовку или цене"
-    prepopulated_fields = {"slug": ("title", )}
+    prepopulated_fields = {"slug": ("title",)}
     list_display = ("title", "price", "date_created_property", "date_update_property", "is_published",)
     list_editable = ("is_published", "price")
     list_filter = ("is_published", "category",)
@@ -49,14 +62,44 @@ class ProductAdmin(admin.ModelAdmin):
         (
             "Основное",
             {
-                "fields": ("title", "descr", "category", "price", "is_published" ),
+                "fields": (
+                    "title", "descr", "category", "price", "filter_price", "filter_availability", "is_published"),
                 "description": "Основные значения"
             }
         ),
         (
             "Дополнителные",
             {
-                "fields": ("date_created", "author", "slug", "image", "novelty")
+                "fields": ("date_created", "author", "slug", "image", "novelty", "popularity",)
+            }
+        )
+    )
+
+
+@admin.register(Publication)
+class PublicationAdmin(admin.ModelAdmin):
+    actions = (make_published, make_unpublished)
+    search_fields = ("title",)
+    search_help_text = "Поиск по заголовку публикации"
+    prepopulated_fields = {"slug": ("title",)}
+    list_display = ("title", "date_created", "is_published",)
+    list_editable = ("is_published",)
+    list_filter = ("is_published", "type_of_publication",)
+    ordering = ("-date_created", "title")
+    date_hierarchy = "date_created"
+    fieldsets = (
+        (
+            "Основное",
+            {
+                "fields": (
+                    "title", "descr", "type_of_publication", "is_published"),
+                "description": "Основные значения"
+            }
+        ),
+        (
+            "Дополнителные",
+            {
+                "fields": ("date_created", "slug", "image",)
             }
         )
     )
@@ -71,7 +114,6 @@ class ContactAdmin(admin.ModelAdmin):
     ordering = ("-date_created",)
 
 
-
 @admin.register(EmailBase)
 class EmailBaseAdmin(admin.ModelAdmin):
     list_display = ('email', 'is_published',)
@@ -79,9 +121,3 @@ class EmailBaseAdmin(admin.ModelAdmin):
     search_fields = ('email',)
     search_help_text = 'Поиск по эллектронной почте'
     ordering = ('-date_created',)
-
-
-
-# manager.register(Category, CategoryAdmin)
-# manager.register(Product, ProductAdmin)
-# manager.register(Contact, ContactManager)

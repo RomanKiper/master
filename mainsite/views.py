@@ -6,7 +6,7 @@ from django.views.generic import ListView, DetailView, CreateView, TemplateView
 from django.views.decorators.http import require_GET
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import ContactForm, EmailBaseForm
-from .models import Product, Contact, EmailBase, Category
+from .models import Product, Contact, EmailBase, Category, FilterAvailability, FilterPrice, Publication
 from django.core.paginator import Paginator
 
 
@@ -15,7 +15,7 @@ class BaseMixin:
         'instagram': 'https://instagram.com/stallain.by?igshid=NTdlMDg3MTY=',
         'facebook': 'https://www.facebook.com/',
         'form_email': EmailBaseForm(),
-        }
+    }
 
     def post(self, request):
         form = EmailBaseForm(request.POST)
@@ -24,15 +24,38 @@ class BaseMixin:
         return self.get(request)
 
 
-
 class CatalogListView(BaseMixin, ListView):
     paginate_by = 9
-    template_name = "mainsite_new/catalog.html"
+    template_name = "mainsite_new/catalog_list.html"
     context_object_name = "catalog"
     model = Product
 
     def get_queryset(self):
         return Product.objects.filter(is_published=True)
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data()
+        context.update(self.context)
+        filter_price = FilterPrice.objects.filter(is_published=True)
+        filter_availability = FilterAvailability.objects.filter(is_published=True, )
+        category = Category.objects.filter(is_published=True)
+        filtered_product_list = Product.objects.filter(category__in=self.request.GET.getlist('category'))
+
+        context.update({
+            'filter_price': filter_price,
+            'category': category,
+            'filter_availability': filter_availability,
+        })
+        return context
+
+
+class PublicationListView(BaseMixin, ListView):
+    template_name = "mainsite_new/publications_list.html"
+    context_object_name = "publications"
+    model = Publication
+
+    def get_queryset(self):
+        return Publication.objects.filter(is_published=True)
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data()
@@ -48,8 +71,8 @@ class MainPageCategoryView(BaseMixin, ListView):
         context = super().get_context_data()
         context.update(self.context)
         product_new = Product.objects.filter(is_published=True, novelty=True)[:4]
-        product_mostpopular = Product.objects.filter(is_published=True, )[:8]
         category = Category.objects.filter(is_published=True)
+        product_mostpopular = Product.objects.filter(is_published=True, )[:8]
 
         context.update({
             'product_new': product_new,
@@ -68,6 +91,12 @@ class ProductDetailView(BaseMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
         context.update(self.context)
+        product_mostpopular = Product.objects.filter(is_published=True, novelty=True)[:4]
+
+        context.update({
+            'product_mostpopular': product_mostpopular,
+        })
+
         return context
 
 
@@ -103,16 +132,14 @@ class ContactCreateView(BaseMixin, CreateView):
         context['form_email'] = EmailBaseForm()
         return context
 
-
     def post(self, request: HttpRequest):
         if request.POST.get('form_type') == 'sentContact':
-                form = ContactForm(request.POST)
-                if form.is_valid():
-                    form.save()
+            form = ContactForm(request.POST)
+            if form.is_valid():
+                form.save()
         elif request.POST.get('form_tipe') == 'sentMessage':
             print(request.POST.get('form_email'))
         return self.get(request=request)
-
 
 
 class EmailCreateView(BaseMixin, CreateView):
@@ -125,22 +152,6 @@ class EmailCreateView(BaseMixin, CreateView):
         context = super().get_context_data()
         context.update(self.context)
         return context
-
-
-class Searchpanel(ListView):
-    template_name = "mainsite_new/search_result.html"
-    context_object_name = "news"
-    model = Product
-
-
-    def get_queryset(self):
-        return Product.objects.filter(title__icontains=self.request.GET.get('q'))
-
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['q'] = self.request.GET.get('q')
-        return context
-
 
 
 def error404(request, exception):
