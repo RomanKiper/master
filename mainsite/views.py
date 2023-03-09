@@ -63,7 +63,7 @@ class PublicationListView(BaseMixin, ListView):
         return context
 
 
-class MainPageCategoryView(BaseMixin, ListView):
+class MainPageView(BaseMixin, ListView):
     template_name = "mainsite_new/index.html"
     model = Category
 
@@ -72,7 +72,7 @@ class MainPageCategoryView(BaseMixin, ListView):
         context.update(self.context)
         product_new = Product.objects.filter(is_published=True, novelty=True)[:4]
         category = Category.objects.filter(is_published=True)
-        product_mostpopular = Product.objects.filter(is_published=True, )[:8]
+        product_mostpopular = Product.objects.filter(is_published=True, popularity=True )[:8]
 
         context.update({
             'product_new': product_new,

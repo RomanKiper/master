@@ -41,7 +41,6 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "mainsite.apps.MainsiteConfig",
     "registration.apps.RegistrationConfig",
-    "django_filters"
 ]
 
 MIDDLEWARE = [
