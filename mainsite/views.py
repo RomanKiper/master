@@ -55,7 +55,7 @@ class PublicationListView(BaseMixin, ListView):
     model = Publication
 
     def get_queryset(self):
-        return Publication.objects.filter(is_published=True)
+        return Publication.objects.filter(is_published=True,).order_by('-date_created')
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data()
@@ -72,12 +72,29 @@ class MainPageView(BaseMixin, ListView):
         context.update(self.context)
         product_new = Product.objects.filter(is_published=True, novelty=True)[:4]
         category = Category.objects.filter(is_published=True)
-        product_mostpopular = Product.objects.filter(is_published=True, popularity=True )[:8]
+        product_mostpopular = Product.objects.filter(is_published=True, popularity=True)[:8]
 
         context.update({
             'product_new': product_new,
             'category': category,
             'product_mostpopular': product_mostpopular,
+        })
+        return context
+
+
+class PublicationDetailView(BaseMixin, DetailView):
+    template_name = 'mainsite_new/publication_main.html'
+    context_object_name = 'publication'
+    slug_url_kwarg = 'publication_slug'
+    model = Publication
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        context.update(self.context)
+        publication_latest = Publication.objects.filter(is_published=True)[:8]
+
+        context.update({
+            'publication_latest': publication_latest,
         })
         return context
 

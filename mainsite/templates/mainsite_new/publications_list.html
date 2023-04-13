@@ -2,18 +2,16 @@
 {% load static %}
 
 {% block title %}
-Публикация
+Публикации
 {% endblock %}
 
 {% block main_new %}
-<div class="container-fluid">
-    <div class="row px-xl-5">
-        <div class="col-12">
-            <nav class="breadcrumb bg-light mb-30">
-                <a class="breadcrumb-item text-dark" href="{% url 'mainsite_products' %}">Главная</a>
-                <span class="breadcrumb-item active">Новости и статьи</span>
-            </nav>
-        </div>
+<div class="row px-xl-5">
+    <div class="col-12">
+        <nav class="breadcrumb bg-light mb-30">
+            <a class="breadcrumb-item text-dark" href="{% url 'mainsite_products' %}">Главная</a>
+            <span class="breadcrumb-item active">Новости и статьи</span>
+        </nav>
     </div>
 </div>
 <!-- Breadcrumb End -->
@@ -27,23 +25,24 @@
         <div class="d-inline-flex align-items-left">
             <a class="text-body mr-3" href="#">Новости</a>
             <a class="text-body mr-3" href="#">Статьи</a>
-
         </div>
         <div class="d-inline-flex align-items-center d-block d-lg-none">
-
         </div>
     </div>
 </div>
 
-
 {% for publication in publications %}
-<div class="container-fluid pb-5">
-    <H4>{{ publication.title }}</H4>
-    <p>{{ publication.date_created }}</p>
-    <p>{{ publication.descr|truncatechars:180 }}</p>
+<div class="container-fluid">
+    <div class="row px-xl-5">
+        <div class="col">
+            <div class="bg-light p-30">
+                <a class="h5 text-decoration-none text-truncate" href="{{ publication.get_absolute_url }}">{{ publication.title|truncatechars:70 }}</a>
+                <p>{{ publication.date_created }}</p>
+                <p>{{ publication.descr|truncatechars:180 }}</p>
+            </div>
+        </div>
+    </div>
 </div>
 {% endfor %}
-
-
-
 {% endblock %}
+

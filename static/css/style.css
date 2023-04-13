@@ -9710,3 +9710,24 @@ a.text-dark:hover, a.text-dark:focus {
     transform: translateY(-15px);
   }
 }
+
+.left-img {
+    float:left; /* Выравниваем по левому краю */
+    margin: 10px 10px 10px 0; /* Настраиваем отступы вокруг картинки */
+}
+.right-img  {
+    float: right; /* Выравниваем по правому краю  */
+    margin: 10px 0 10px 10px; /* Настраиваем отступы вокруг картинки */
+}
+
+.hover-image-scale {
+  display: inline-block;
+  overflow: hidden; /* Скрываем всё за контуром */
+}
+.hover-image-scale img {
+  transition: 1s; /* Время эффекта */
+  display: block;
+}
+.hover-image-scale img:hover {
+  transform: scale(1.3); /* Увеличиваем масштаб */
+}

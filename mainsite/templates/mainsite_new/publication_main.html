@@ -1,0 +1,38 @@
+{% extends "mainsite_new/base.html" %}
+{% load static %}
+
+{% block title %}
+Публикации
+{% endblock %}
+
+{% block main_new %}
+<div class="container-fluid">
+    <div class="row px-xl-5">
+        <div class="col-12">
+            <nav class="breadcrumb bg-light mb-30">
+                <a class="breadcrumb-item text-dark" href="{% url 'mainsite_products' %}">Главная</a>
+                <a class="breadcrumb-item text-dark" href="{% url 'mainsite_publications' %}">Все новости и статьи</a>
+                <span class="breadcrumb-item active">Новости и статьи</span>
+            </nav>
+        </div>
+    </div>
+</div>
+<!-- Breadcrumb End -->
+<div class="container-fluid">
+    <div class="row px-xl-5">
+        <div class="col">
+            <div class="bg-light p-30">
+                <h4>{{ publication.title|truncatechars:70 }}</h4>
+                <br>
+                <div class="hover-image-scale">
+                    <p><img src="{{ publication.image.url }}" alt="" class="right-img" width="500" height="500">{{ publication.descr|linebreaks }}</p>
+                </div>
+                <h6>Дата публикации: {{ publication.date_created }}</h6>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% include "mainsite_new/publications_latest_card.html"%}
+
+{% endblock%}
