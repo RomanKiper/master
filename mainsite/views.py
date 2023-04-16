@@ -1,3 +1,4 @@
+from django.db.models import Q
 from django.http import HttpRequest
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy
@@ -24,6 +25,7 @@ class BaseMixin:
         return self.get(request)
 
 
+
 class CatalogListView(BaseMixin, ListView):
     paginate_by = 9
     template_name = "mainsite_new/catalog_list.html"
@@ -39,7 +41,7 @@ class CatalogListView(BaseMixin, ListView):
         filter_price = FilterPrice.objects.filter(is_published=True)
         filter_availability = FilterAvailability.objects.filter(is_published=True, )
         category = Category.objects.filter(is_published=True)
-        filtered_product_list = Product.objects.filter(category__in=self.request.GET.getlist('category'))
+
 
         context.update({
             'filter_price': filter_price,
@@ -47,6 +49,8 @@ class CatalogListView(BaseMixin, ListView):
             'filter_availability': filter_availability,
         })
         return context
+
+
 
 
 class PublicationListView(BaseMixin, ListView):
@@ -171,5 +175,19 @@ class EmailCreateView(BaseMixin, CreateView):
         return context
 
 
+class FilterProductView(CatalogListView, ListView):
+
+    def get_queryset(self):
+        queryset = Product.objects.filter(
+            Q(category__in=self.request.GET.getlist("category")) |
+            Q(filter_price__in=self.request.GET.getlist("filter_price")) |
+            Q(filter_availability__in=self.request.GET.getlist("filter_availability"))
+        )
+        return queryset
+
+
 def error404(request, exception):
     return render(request, "mainsite/error404.html")
+
+
+

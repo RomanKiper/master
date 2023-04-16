@@ -26,53 +26,48 @@
             <!-- Shop Sidebar Start -->
             <div class="col-lg-3 col-md-4">
                  <!-- Size Start -->
-                <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Фильтр по категории</span></h5>
-                <div class="bg-light p-4 mb-30">
-                    <form>
-                       {% for category in category %}
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" id="size-all">
-                            <label class="custom-control-label" for="size-all">{{ category.name }}</label>
-                        </div>
-                        {% endfor %}
-                    </form>
-                </div>
+                <form action=" {% url 'filter' %}" method="get">
+                    <div class="left-side">
+                        <h3 class="sear-head editContent">Категории</h3>
+                        <ul class="w3layouts-box-list">
+                            {% for category in category %}
+                                <li class="editContent">
+                                    <input type="checkbox" class="checked" name="category" value="{{ category.id }}">
+                                    <span class="span editContent">{{ category.name }}</span>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
 
-                <!-- Size End -->
+                    <div class="left-side">
+                        <h3 class="sear-head editContent">Диапазон цен</h3>
+                        <ul class="w3layouts-box-list">
+                            {% for filter_price in filter_price %}
+                                <li class="editContent">
+                                    <input type="checkbox" class="checked" name="filter_price" value="{{ filter_price.id }}">
+                                    <span class="span editContent">{{ filter_price.name }}</span>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
 
-                <!-- Price Start -->
-                <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Фильтр по цене</span></h5>
-                <div class="bg-light p-4 mb-30">
-                    <form>
-                        {% for filter_price in filter_price %}
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between">
-                            <input type="checkbox" class="custom-control-input" id="price-5">
-                            <label class="custom-control-label" for="price-5">{{ filter_price.name }}</label>
-                        </div>
-                        {% endfor %}
-                    </form>
-                </div>
-                <!-- Price End -->
-
-                <!-- наличие старт -->
-                <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Наличие на складе</span></h5>
-                <div class="bg-light p-4 mb-30">
-                    <form>
-                        {% for filter_availability in filter_availability %}
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between">
-                            <input type="checkbox" class="custom-control-input" id="color-5">
-                            <label class="custom-control-label" for="color-5">{{ filter_availability.name }}</label>
-                            <span class="badge border font-weight-normal"></span>
-                        </div>
-                        {% endfor %}
-                    </form>
-                </div>
-                <!-- Color End -->
+                <div class="left-side">
+                        <h3 class="sear-head editContent">Наличие на складе</h3>
+                        <ul class="w3layouts-box-list">
+                            {% for filter_availability in filter_availability %}
+                                <li class="editContent">
+                                    <input type="checkbox" class="checked" name="filter_availability" value="{{ filter_availability.id }}">
+                                    <span class="span editContent">{{ filter_availability.name }}</span>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <button type="submit">НАЙТИ</button>
+                </form>
             </div>
             <!-- Shop Sidebar End -->
 
             <!-- Shop Product Start -->
-
             <div class="col-lg-9 col-md-8">
                 <div class="row pb-3">
                     <div class="col-12 pb-1">
@@ -82,8 +77,6 @@
                                 <button class="btn btn-sm btn-light ml-2"><i class="fa fa-bars"></i></button>-->
                             </div>
                             <div class="ml-2">
-
-
                             </div>
                         </div>
                     </div>
