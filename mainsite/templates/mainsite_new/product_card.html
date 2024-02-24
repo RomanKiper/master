@@ -3,14 +3,13 @@
 {% for product in page_obj %}
 <div class="col-lg-4 col-md-6 col-sm-6 pb-1">
     <div class="product-item bg-light mb-4">
+        <a class="h6 text-decoration-none text-truncate" href="{{ product.get_absolute_url }}">
         <div class="product-img position-relative overflow-hidden">
             <img class="img-fluid w-100" src="{{ product.image.url }}" alt="...">
             <div class="product-action">
                 {% if product.novelty %}
                 <h3 ><span class="label label-danger">Новинка</span></h3>
                 {% endif %}
-                <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-shopping-cart"></i></a>
-                <a class="btn btn-outline-dark btn-square" href=""><i class="far fa-heart"></i></a>
             </div>
         </div>
         <div class="text-center py-4">
@@ -20,8 +19,8 @@
                     <h5>{{ product.price }}</h5><h6 class="text-muted ml-2">рублей за шт.</h6>
                 </div>
             </div>
-
         </div>
+        </a>
     </div>
 </div>
 {% endfor %}

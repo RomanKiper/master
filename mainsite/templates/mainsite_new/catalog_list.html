@@ -28,7 +28,7 @@
                  <!-- Size Start -->
                 <form action=" {% url 'filter' %}" method="get">
                     <div class="left-side">
-                        <h3 class="sear-head editContent">Категории</h3>
+                        <h5 class="sear-head editContent">Категории товара</h5>
                         <ul class="w3layouts-box-list">
                             {% for category in category %}
                                 <li class="editContent">
@@ -40,7 +40,7 @@
                     </div>
 
                     <div class="left-side">
-                        <h3 class="sear-head editContent">Диапазон цен</h3>
+                        <h5 class="sear-head editContent">Цена от...до руб.</h5>
                         <ul class="w3layouts-box-list">
                             {% for filter_price in filter_price %}
                                 <li class="editContent">
@@ -52,7 +52,7 @@
                     </div>
 
                 <div class="left-side">
-                        <h3 class="sear-head editContent">Наличие на складе</h3>
+                        <h5 class="sear-head editContent">Наличие товара</h5>
                         <ul class="w3layouts-box-list">
                             {% for filter_availability in filter_availability %}
                                 <li class="editContent">

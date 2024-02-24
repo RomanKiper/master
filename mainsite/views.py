@@ -52,21 +52,6 @@ class CatalogListView(BaseMixin, ListView):
 
 
 
-
-class PublicationListView(BaseMixin, ListView):
-    template_name = "mainsite_new/publications_list.html"
-    context_object_name = "publications"
-    model = Publication
-
-    def get_queryset(self):
-        return Publication.objects.filter(is_published=True,).order_by('-date_created')
-
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super().get_context_data()
-        context.update(self.context)
-        return context
-
-
 class MainPageView(BaseMixin, ListView):
     template_name = "mainsite_new/index.html"
     model = Category
@@ -84,6 +69,33 @@ class MainPageView(BaseMixin, ListView):
             'product_mostpopular': product_mostpopular,
         })
         return context
+
+
+class FilterProductView(CatalogListView, MainPageView, ListView):
+
+    def get_queryset(self):
+        queryset = Product.objects.filter(
+            Q(category__in=self.request.GET.getlist("category")) |
+            Q(filter_price__in=self.request.GET.getlist("filter_price")) |
+            Q(filter_availability__in=self.request.GET.getlist("filter_availability"))
+        )
+        return queryset
+
+
+
+class PublicationListView(BaseMixin, ListView):
+    template_name = "mainsite_new/publications_list.html"
+    context_object_name = "publications"
+    model = Publication
+
+    def get_queryset(self):
+        return Publication.objects.filter(is_published=True,).order_by('-date_created')
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data()
+        context.update(self.context)
+        return context
+
 
 
 class PublicationDetailView(BaseMixin, DetailView):
@@ -173,17 +185,6 @@ class EmailCreateView(BaseMixin, CreateView):
         context = super().get_context_data()
         context.update(self.context)
         return context
-
-
-class FilterProductView(CatalogListView, ListView):
-
-    def get_queryset(self):
-        queryset = Product.objects.filter(
-            Q(category__in=self.request.GET.getlist("category")) |
-            Q(filter_price__in=self.request.GET.getlist("filter_price")) |
-            Q(filter_availability__in=self.request.GET.getlist("filter_availability"))
-        )
-        return queryset
 
 
 def error404(request, exception):
